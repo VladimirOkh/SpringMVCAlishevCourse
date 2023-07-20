@@ -24,5 +24,30 @@ public class FirstController {
     public String byePage() {
         return "first/goodbye";
     }
+    @GetMapping("/calculator")
+    public String calculator(@RequestParam(value = "a") int a,
+                             @RequestParam(value = "b") int b,
+                             @RequestParam(value = "action") String action,
+                             Model model) {
+        switch (action) {
+            case "multiplication":
+                model.addAttribute("message", a * b);
+                break;
+            case "division":
+                model.addAttribute("message", a / b);
+                break;
+            case "addition":
+                model.addAttribute("message", a + b);
+                break;
+            case "subtraction":
+                model.addAttribute("message", a - b);
+                break;
+            default:
+                model.addAttribute("message", "Неверное значение action");
+                break;
+        }
+
+        return "/first/calculator";
+    }
 
 }
