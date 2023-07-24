@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/first")
-
 public class FirstController {
 
     @GetMapping("/hello")
@@ -25,16 +24,16 @@ public class FirstController {
         return "first/goodbye";
     }
     @GetMapping("/calculator")
-    public String calculator(@RequestParam(value = "a") int a,
-                             @RequestParam(value = "b") int b,
-                             @RequestParam(value = "action") String action,
+    public String calculator(@RequestParam("a") int a,
+                             @RequestParam("b") int b,
+                             @RequestParam("action") String action,
                              Model model) {
         switch (action) {
             case "multiplication":
                 model.addAttribute("message", a * b);
                 break;
             case "division":
-                model.addAttribute("message", a / b);
+                model.addAttribute("message", a / (double) b);
                 break;
             case "addition":
                 model.addAttribute("message", a + b);
