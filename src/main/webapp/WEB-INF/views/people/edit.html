@@ -19,7 +19,12 @@
     <input type="text" th:field="*{email}" id="email"/>
     <div style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
     <br/>
+    <label for="address">Enter address: </label>
+    <input type="text" th:field="*{address}" id="address"/>
+    <div style="color: red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">Address Error</div>
+    <br/>
     <input type="submit" value="Update"/>
+    <a th:href="@{/people/{id}(id=${person.getId()})}">Go back</a>
 </form>
 
 </body>
