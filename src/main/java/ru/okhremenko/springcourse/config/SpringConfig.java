@@ -27,6 +27,7 @@ public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
     private final Environment environment; //С помощью этого бина мы получаем доступ к св-вам который подгрузились в приложение
+
     @Autowired
     public SpringConfig(ApplicationContext applicationContext, Environment environment) {
         this.applicationContext = applicationContext;
@@ -56,16 +57,19 @@ public class SpringConfig implements WebMvcConfigurer {
         resolver.setTemplateEngine(templateEngine());
         registry.viewResolver(resolver);
     }
+
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
         dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("driver")));
         dataSource.setUrl(environment.getProperty("url"));
-        dataSource.setUsername(environment.getProperty("password"));
-        dataSource.setPassword(environment.getProperty("username"));
+        dataSource.setUsername(environment.getProperty("user"));
+        dataSource.setPassword(environment.getProperty("password"));
         return dataSource;
 
     }
+
     @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
