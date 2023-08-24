@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.okhremenko.springcourse.dao.PersonDAO;
 import ru.okhremenko.springcourse.models.Person;
-import ru.okhremenko.springcourse.util.PersonValidator;
+
 
 import javax.validation.Valid;
 
@@ -16,53 +16,51 @@ import javax.validation.Valid;
 public class PeopleController {
 
     private final PersonDAO personDAO;
-    private final PersonValidator personValidator;
+
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
+    public PeopleController(PersonDAO personDAO) {
         this.personDAO = personDAO;
-        this.personValidator = personValidator;
     }
 
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("people", personDAO.index());
-
         return "people/index";
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id,
-                       Model model) {
+    public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personDAO.show(id));
         return "people/show";
     }
 
     @GetMapping("/new")
-    public String newPerson(Model model) {
-        model.addAttribute("person", new Person());
+    public String newPerson(@ModelAttribute("person") Person person) {
         return "people/new";
     }
 
-    @PostMapping()                                                    //Should always be right after @Valid
-    public String create(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);//В bindingResult храним ошибки со всех валидаций
+    @PostMapping()
+    public String create(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "people/new";
+
         personDAO.save(person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @ModelAttribute("id") int id) {
+    public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("person", personDAO.show(id));
         return "people/edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult, @PathVariable("id") int id) {
-        personValidator.validate(person, bindingResult);
+    public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
+                         @PathVariable("id") int id) {
         if (bindingResult.hasErrors())
-            return "people/new";
+            return "people/edit";
+
         personDAO.update(id, person);
         return "redirect:/people";
     }

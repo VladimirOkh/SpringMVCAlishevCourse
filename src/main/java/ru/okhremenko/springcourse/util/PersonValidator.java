@@ -24,10 +24,10 @@ public class PersonValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        Person person = (Person) o;
+//        Person person = (Person) o;
         //Проверить есть ли человек с таким же email в БД
-        if (personDAO.show(person.getEmail()).isPresent()) {
-            errors.rejectValue("email", "","This email is already taken");
-        }
+//        if (personDAO.show(person.getEmail()).isPresent()) {
+//            errors.rejectValue("email", "","This email is already taken");
+//        }
     }
 }
